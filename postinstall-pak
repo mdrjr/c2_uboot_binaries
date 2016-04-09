@@ -1,0 +1,15 @@
+#!/bin/bash
+#
+# (C) Copyright 2016 Hardkernel Co,.Ltd
+#
+
+bpart=`mount | grep media/boot | awk '{print $1}' | sed s/"p1"//g`
+
+BL1=/usr/share/c2_uboot/bl1.bin.hardkernel
+UBOOT=/usr/share/c2_uboot/u-boot.bin
+
+dd if=$BL1 of=$bpart conv=fsync bs=1 count=442
+dd if=$BL1 of=$bpart conv=fsync bs=512 skip=1 seek=1
+dd if=$UBOOT of=$bpart conv=fsync bs=512 seek=97
+
+sync
